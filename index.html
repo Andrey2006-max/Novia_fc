@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Novia FC - Informes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+    }
+    header {
+      background: #ff4d6d;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .prohibido { color: red; font-weight: bold; }
+    .permitido { color: green; font-weight: bold; }
+
+    .formulario {
+      background: white;
+      padding: 15px;
+      margin: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #222;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>📋 Novia FC - Informes Oficiales</h1>
+  <p>Control de salidas de Alan Andrey 😎</p>
+</header>
+
+<div class="formulario">
+  <h3>➕ Agregar nuevo informe</h3>
+  <input type="date" id="fecha">
+  <select id="estado">
+    <option value="prohibido">❌ Prohibido</option>
+    <option value="permitido">✅ Permitido</option>
+  </select>
+  <input type="text" id="detalle" placeholder="Detalle...">
+  <button onclick="agregarInforme()">Agregar</button>
+</div>
+
+<div class="container" id="contenedor"></div>
+
+<footer>
+  <p>Novia FC © 2026 💘</p>
+</footer>
+
+<script>
+function agregarInforme() {
+  const fecha = document.getElementById('fecha').value;
+  const estado = document.getElementById('estado').value;
+  const detalle = document.getElementById('detalle').value;
+
+  if (!fecha || !detalle) {
+    alert('Completa todos los campos');
+    return;
+  }
+
+  const contenedor = document.getElementById('contenedor');
+
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const estadoTexto = estado === 'prohibido' ? '❌ Prohibido salir' : '✅ Permitido salir';
+  const clase = estado === 'prohibido' ? 'prohibido' : 'permitido';
+
+  card.innerHTML = `
+    <h3>📅 ${fecha}</h3>
+    <p class="${clase}">${estadoTexto}</p>
+    <p>${detalle}</p>
+  `;
+
+  contenedor.appendChild(card);
+
+  guardarDatos();
+}
+
+function guardarDatos() {
+  localStorage.setItem('informes', document.getElementById('contenedor').innerHTML);
+}
+
+function cargarDatos() {
+  const datos = localStorage.getItem('informes');
+  if (datos) {
+    document.getElementById('contenedor').innerHTML = datos;
+  }
+}
+
+cargarDatos();
+</script>
+
+</body>
+</html>
