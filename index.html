@@ -5,62 +5,92 @@
   <title>Novia FC - Informes</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ff4d6d, #ffc2d1);
       margin: 0;
+      color: #333;
     }
+
     header {
-      background: #ff4d6d;
-      color: white;
-      padding: 20px;
       text-align: center;
+      padding: 30px;
+      color: white;
     }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .login {
+      text-align: center;
+      margin-top: 80px;
+    }
+
+    .formulario {
+      background: white;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      display: none;
+    }
+
     .container {
       padding: 20px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
     }
+
     .card {
       background: white;
-      padding: 15px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    .prohibido { color: red; font-weight: bold; }
-    .permitido { color: green; font-weight: bold; }
-
-    .formulario {
-      background: white;
-      padding: 15px;
-      margin: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      display: none;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: transform 0.2s;
     }
 
-    .login {
-      text-align: center;
-      margin-top: 100px;
+    .card:hover {
+      transform: scale(1.05);
     }
 
-    input, select, button {
+    .prohibido {
+      color: #ff2e63;
+      font-weight: bold;
+    }
+
+    .permitido {
+      color: #00c897;
+      font-weight: bold;
+    }
+
+    input, select {
       padding: 10px;
       margin: 5px;
       border-radius: 10px;
       border: 1px solid #ccc;
+      width: 90%;
     }
+
     button {
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: none;
       background: #ff4d6d;
       color: white;
-      border: none;
       cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #e63950;
     }
 
     footer {
       text-align: center;
       padding: 15px;
-      background: #222;
       color: white;
     }
   </style>
@@ -68,25 +98,25 @@
 <body>
 
 <header>
-  <h1>📋 Novia FC - Informes Oficiales</h1>
-  <p>Acceso restringido 🔐</p>
+  <h1>💘 Novia FC</h1>
+  <p>Sistema oficial de control 😎</p>
 </header>
 
 <div class="login" id="login">
-  <h2>🔐 Ingresar</h2>
+  <h2>🔐 Acceso</h2>
   <input type="password" id="password" placeholder="Contraseña">
   <br>
   <button onclick="login()">Entrar</button>
 </div>
 
 <div class="formulario" id="formulario">
-  <h3>➕ Agregar nuevo informe</h3>
+  <h3>➕ Nuevo informe</h3>
   <input type="date" id="fecha">
   <select id="estado">
     <option value="prohibido">❌ Prohibido</option>
     <option value="permitido">✅ Permitido</option>
   </select>
-  <input type="text" id="detalle" placeholder="Detalle...">
+  <input type="text" id="detalle" placeholder="Ej: No sales hoy 😅">
   <button onclick="agregarInforme()">Agregar</button>
 </div>
 
@@ -136,7 +166,6 @@ function agregarInforme() {
   `;
 
   contenedor.appendChild(card);
-
   guardarDatos();
 }
 
