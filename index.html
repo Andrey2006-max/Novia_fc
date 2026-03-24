@@ -36,7 +36,14 @@
       margin: 20px;
       border-radius: 15px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: none;
     }
+
+    .login {
+      text-align: center;
+      margin-top: 100px;
+    }
+
     input, select, button {
       padding: 10px;
       margin: 5px;
@@ -62,10 +69,17 @@
 
 <header>
   <h1>📋 Novia FC - Informes Oficiales</h1>
-  <p>Control de salidas de Alan Andrey 😎</p>
+  <p>Acceso restringido 🔐</p>
 </header>
 
-<div class="formulario">
+<div class="login" id="login">
+  <h2>🔐 Ingresar</h2>
+  <input type="password" id="password" placeholder="Contraseña">
+  <br>
+  <button onclick="login()">Entrar</button>
+</div>
+
+<div class="formulario" id="formulario">
   <h3>➕ Agregar nuevo informe</h3>
   <input type="date" id="fecha">
   <select id="estado">
@@ -83,6 +97,20 @@
 </footer>
 
 <script>
+const PASSWORD = "novia123";
+
+function login() {
+  const pass = document.getElementById('password').value;
+
+  if (pass === PASSWORD) {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('formulario').style.display = 'block';
+    localStorage.setItem('auth', 'true');
+  } else {
+    alert('Contraseña incorrecta 😅');
+  }
+}
+
 function agregarInforme() {
   const fecha = document.getElementById('fecha').value;
   const estado = document.getElementById('estado').value;
@@ -120,6 +148,12 @@ function cargarDatos() {
   const datos = localStorage.getItem('informes');
   if (datos) {
     document.getElementById('contenedor').innerHTML = datos;
+  }
+
+  const auth = localStorage.getItem('auth');
+  if (auth === 'true') {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('formulario').style.display = 'block';
   }
 }
 
