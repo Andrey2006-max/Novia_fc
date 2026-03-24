@@ -1,108 +1,115 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Novia FC - Informes</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #ff4d6d, #ffc2d1);
-      margin: 0;
-      color: #333;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novia FC</title>
 
-    header {
-      text-align: center;
-      padding: 30px;
-      color: white;
-    }
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  transition: 0.3s;
+}
 
-    .login {
-      text-align: center;
-      margin-top: 80px;
-    }
+.light {
+  background: linear-gradient(135deg, #ff4d6d, #ffc2d1);
+  color: #333;
+}
 
-    .formulario {
-      background: white;
-      padding: 20px;
-      margin: 20px;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      display: none;
-    }
+.dark {
+  background: #1e1e1e;
+  color: white;
+}
 
-    .container {
-      padding: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
+header {
+  text-align: center;
+  padding: 20px;
+}
 
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      transition: transform 0.2s;
-      position: relative;
-    }
+button {
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+}
 
-    .card:hover {
-      transform: scale(1.05);
-    }
+.toggle {
+  background: black;
+  color: white;
+}
 
-    .delete-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: red;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 25px;
-      height: 25px;
-      cursor: pointer;
-    }
+.container {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
 
-    .prohibido { color: #ff2e63; font-weight: bold; }
-    .permitido { color: #00c897; font-weight: bold; }
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
 
-    input, select {
-      padding: 10px;
-      margin: 5px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      width: 90%;
-    }
+.dark .card {
+  background: #2c2c2c;
+}
 
-    button {
-      padding: 10px 20px;
-      border-radius: 20px;
-      border: none;
-      background: #ff4d6d;
-      color: white;
-      cursor: pointer;
-      margin-top: 10px;
-    }
+.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+}
 
-    .stats {
-      text-align: center;
-      color: white;
-      margin-bottom: 10px;
-    }
+.prohibido { color: red; }
+.permitido { color: green; }
 
-    footer {
-      text-align: center;
-      padding: 15px;
-      color: white;
-    }
-  </style>
+.formulario {
+  display: none;
+  text-align: center;
+}
+
+.login {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.welcome {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #ff4d6d;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  z-index: 10;
+}
+
+.stats {
+  text-align: center;
+  margin: 10px;
+}
+</style>
 </head>
-<body>
+
+<body class="light">
+
+<div class="welcome" id="welcome">💘 Bienvenida a Novia FC 💘</div>
 
 <header>
   <h1>💘 Novia FC</h1>
-  <p>Sistema oficial 😎</p>
+  <button class="toggle" onclick="toggleModo()">🌙/☀️</button>
 </header>
 
 <div class="stats" id="stats"></div>
@@ -115,104 +122,91 @@
 </div>
 
 <div class="formulario" id="formulario">
-  <h3>➕ Nuevo informe</h3>
   <input type="date" id="fecha">
   <select id="estado">
     <option value="prohibido">❌ Prohibido</option>
     <option value="permitido">✅ Permitido</option>
   </select>
-  <input type="text" id="detalle" placeholder="Detalle...">
+  <input type="text" id="detalle" placeholder="Detalle">
   <button onclick="agregarInforme()">Agregar</button>
 </div>
 
 <div class="container" id="contenedor"></div>
 
-<footer>
-  <p>Novia FC © 2026 💘</p>
-</footer>
-
 <script>
 const PASSWORD = "novia123";
 
-function login() {
-  const pass = document.getElementById('password').value;
-  if (pass === PASSWORD) {
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('formulario').style.display = 'block';
-    localStorage.setItem('auth', 'true');
-  } else {
-    alert('Contraseña incorrecta 😅');
-  }
+setTimeout(()=>{
+  document.getElementById('welcome').style.display='none';
+},2000);
+
+function toggleModo(){
+  document.body.classList.toggle('dark');
 }
 
-function agregarInforme() {
+function login(){
+  const pass = document.getElementById('password').value;
+  if(pass===PASSWORD){
+    document.getElementById('login').style.display='none';
+    document.getElementById('formulario').style.display='block';
+    localStorage.setItem('auth','true');
+  } else alert('Incorrecta');
+}
+
+function agregarInforme(){
   const fecha = document.getElementById('fecha').value;
   const estado = document.getElementById('estado').value;
   const detalle = document.getElementById('detalle').value;
 
-  if (!fecha || !detalle) {
-    alert('Completa todos los campos');
-    return;
-  }
-
-  const contenedor = document.getElementById('contenedor');
+  const cont = document.getElementById('contenedor');
   const card = document.createElement('div');
-  card.className = 'card';
+  card.className='card';
 
-  const estadoTexto = estado === 'prohibido' ? '❌ Prohibido salir' : '✅ Permitido salir';
-  const clase = estado === 'prohibido' ? 'prohibido' : 'permitido';
+  const clase = estado==='prohibido'?'prohibido':'permitido';
+  const texto = estado==='prohibido'?'❌ Prohibido':'✅ Permitido';
 
-  card.innerHTML = `
-    <button class="delete-btn" onclick="eliminar(this)">X</button>
-    <h3>📅 ${fecha}</h3>
-    <p class="${clase}">${estadoTexto}</p>
-    <p>${detalle}</p>
+  card.innerHTML=`
+  <button class="delete-btn" onclick="eliminar(this)">X</button>
+  <h3>${fecha}</h3>
+  <p class="${clase}">${texto}</p>
+  <p>${detalle}</p>
   `;
 
-  contenedor.appendChild(card);
-  guardarDatos();
-  actualizarStats();
+  cont.appendChild(card);
+  guardar(); actualizarStats();
 }
 
-function eliminar(btn) {
+function eliminar(btn){
   btn.parentElement.remove();
-  guardarDatos();
-  actualizarStats();
+  guardar(); actualizarStats();
 }
 
-function guardarDatos() {
-  localStorage.setItem('informes', document.getElementById('contenedor').innerHTML);
+function guardar(){
+  localStorage.setItem('data',document.getElementById('contenedor').innerHTML);
 }
 
-function cargarDatos() {
-  const datos = localStorage.getItem('informes');
-  if (datos) {
-    document.getElementById('contenedor').innerHTML = datos;
-  }
+function cargar(){
+  const d=localStorage.getItem('data');
+  if(d) document.getElementById('contenedor').innerHTML=d;
 
-  const auth = localStorage.getItem('auth');
-  if (auth === 'true') {
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('formulario').style.display = 'block';
+  if(localStorage.getItem('auth')==='true'){
+    document.getElementById('login').style.display='none';
+    document.getElementById('formulario').style.display='block';
   }
 
   actualizarStats();
 }
 
-function actualizarStats() {
-  const cards = document.querySelectorAll('.card');
-  let permitidos = 0;
-  let prohibidos = 0;
-
-  cards.forEach(card => {
-    if (card.innerText.includes('Permitido')) permitidos++;
-    if (card.innerText.includes('Prohibido')) prohibidos++;
+function actualizarStats(){
+  let p=0,pr=0;
+  document.querySelectorAll('.card').forEach(c=>{
+    if(c.innerText.includes('Permitido')) p++;
+    if(c.innerText.includes('Prohibido')) pr++;
   });
-
-  document.getElementById('stats').innerText = `📊 Permitidos: ${permitidos} | ❌ Prohibidos: ${prohibidos}`;
+  document.getElementById('stats').innerText=`Permitidos: ${p} | Prohibidos: ${pr}`;
 }
 
-cargarDatos();
+cargar();
 </script>
 
 </body>
