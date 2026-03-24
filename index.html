@@ -17,11 +17,6 @@
       color: white;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
     .login {
       text-align: center;
       margin-top: 80px;
@@ -49,21 +44,28 @@
       border-radius: 20px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
       transition: transform 0.2s;
+      position: relative;
     }
 
     .card:hover {
       transform: scale(1.05);
     }
 
-    .prohibido {
-      color: #ff2e63;
-      font-weight: bold;
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
     }
 
-    .permitido {
-      color: #00c897;
-      font-weight: bold;
-    }
+    .prohibido { color: #ff2e63; font-weight: bold; }
+    .permitido { color: #00c897; font-weight: bold; }
 
     input, select {
       padding: 10px;
@@ -81,11 +83,12 @@
       color: white;
       cursor: pointer;
       margin-top: 10px;
-      transition: 0.3s;
     }
 
-    button:hover {
-      background: #e63950;
+    .stats {
+      text-align: center;
+      color: white;
+      margin-bottom: 10px;
     }
 
     footer {
@@ -99,8 +102,10 @@
 
 <header>
   <h1>💘 Novia FC</h1>
-  <p>Sistema oficial de control 😎</p>
+  <p>Sistema oficial 😎</p>
 </header>
+
+<div class="stats" id="stats"></div>
 
 <div class="login" id="login">
   <h2>🔐 Acceso</h2>
@@ -116,7 +121,7 @@
     <option value="prohibido">❌ Prohibido</option>
     <option value="permitido">✅ Permitido</option>
   </select>
-  <input type="text" id="detalle" placeholder="Ej: No sales hoy 😅">
+  <input type="text" id="detalle" placeholder="Detalle...">
   <button onclick="agregarInforme()">Agregar</button>
 </div>
 
@@ -131,7 +136,6 @@ const PASSWORD = "novia123";
 
 function login() {
   const pass = document.getElementById('password').value;
-
   if (pass === PASSWORD) {
     document.getElementById('login').style.display = 'none';
     document.getElementById('formulario').style.display = 'block';
@@ -152,7 +156,6 @@ function agregarInforme() {
   }
 
   const contenedor = document.getElementById('contenedor');
-
   const card = document.createElement('div');
   card.className = 'card';
 
@@ -160,6 +163,7 @@ function agregarInforme() {
   const clase = estado === 'prohibido' ? 'prohibido' : 'permitido';
 
   card.innerHTML = `
+    <button class="delete-btn" onclick="eliminar(this)">X</button>
     <h3>📅 ${fecha}</h3>
     <p class="${clase}">${estadoTexto}</p>
     <p>${detalle}</p>
@@ -167,6 +171,13 @@ function agregarInforme() {
 
   contenedor.appendChild(card);
   guardarDatos();
+  actualizarStats();
+}
+
+function eliminar(btn) {
+  btn.parentElement.remove();
+  guardarDatos();
+  actualizarStats();
 }
 
 function guardarDatos() {
@@ -184,6 +195,21 @@ function cargarDatos() {
     document.getElementById('login').style.display = 'none';
     document.getElementById('formulario').style.display = 'block';
   }
+
+  actualizarStats();
+}
+
+function actualizarStats() {
+  const cards = document.querySelectorAll('.card');
+  let permitidos = 0;
+  let prohibidos = 0;
+
+  cards.forEach(card => {
+    if (card.innerText.includes('Permitido')) permitidos++;
+    if (card.innerText.includes('Prohibido')) prohibidos++;
+  });
+
+  document.getElementById('stats').innerText = `📊 Permitidos: ${permitidos} | ❌ Prohibidos: ${prohibidos}`;
 }
 
 cargarDatos();
